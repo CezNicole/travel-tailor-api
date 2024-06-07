@@ -2,14 +2,13 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-
-// add each route variable here
-
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
 
-// add routes middleware
+const attractionsRoute = require("./routes/attractions-route.js");
+app.use("/api/attractions", attractionsRoute);
 
 
 app.listen(PORT, () => {

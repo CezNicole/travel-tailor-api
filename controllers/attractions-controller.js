@@ -1,8 +1,19 @@
 const knex = require("knex")(require("../knexfile.js"));
 
-const getAttractions = async (req, res) => {
+const getAttractionsByProvinceAndSeason = async (req, res) => {
+    const {province_territory, season} = req.params;
+
     try {
-        const data = await knex('attractions').select('*'); //attractions = mySQL table name
+        if(!province_territory && !season){
+            res.status(400).json({
+                message:"Search term is required"
+            });
+        }
+
+        const data = await knex('attractions')
+            .select('*')
+            .where({province_territory: province_territory, best_time_to_visit: season})
+            
         res.status(200).json(data);
     } catch (error) {
         res.status(500).send(`Error retrieving list of attractions from the database: ${error}`);
@@ -10,5 +21,5 @@ const getAttractions = async (req, res) => {
 }
 
 module.exports = {
-    getAttractions
+    getAttractionsByProvinceAndSeason
 }
